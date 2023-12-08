@@ -34,7 +34,15 @@ void ProgEnd()
 
 int IndexFor(char sym)
 {
-  if(sym >= 65 && sym <= 90) // all uppercase letter 'A' - 'Z'
+  if(sym == ' ')
+  {
+    return 26;
+  }
+  else if(sym == '.')
+  {
+    return 27;
+  }
+  else if(sym >= 65 && sym <= 90) // all uppercase letter 'A' - 'Z'
   {
     return sym - 'A';
     // sym = 'A' ->  65 - 65 = [0] index in array alphabet A
@@ -102,11 +110,18 @@ void Encryption(string alphabet, int &fileSize)
   string code;
   for(int i = 0; i < fileSize; i++)
   {
-    //cout << IndexFor(key[i % key.length()]) << " "; // 0 % 6 = 0 -> key[0] = H -> h index in alphabet = 7 ---- % key.length() lai atkartojas key index
-    //cout << IndexFor(content[i]) << " "; // index for message
-    //cout << (IndexFor(content[i]) + IndexFor(key[i % key.length()])) % alphabet.length() << " "; // index values after + and %
-    //cout << alphabet[(IndexFor(content[i]) + IndexFor(key[i % key.length()])) % alphabet.length()] << " "; // result crypyted text
-    code += alphabet[(IndexFor(content[i]) + IndexFor(key[i % key.length()])) % alphabet.length()];
+    if(content[i] == ' ' || content[i] == '.')
+    {
+      code += content[i];
+    }
+    else
+    {
+      code += alphabet[(IndexFor(content[i]) + IndexFor(key[i % key.length()])) % alphabet.length()];
+      //cout << IndexFor(key[i % key.length()]) << " "; // 0 % 6 = 0 -> key[0] = H -> h index in alphabet = 7 ---- % key.length() lai atkartojas key index
+      //cout << IndexFor(content[i]) << " "; // index for message
+      //cout << (IndexFor(content[i]) + IndexFor(key[i % key.length()])) % alphabet.length() << " "; // index values after + and %
+      //cout << alphabet[(IndexFor(content[i]) + IndexFor(key[i % key.length()])) % alphabet.length()] << " "; // result crypyted text
+    }
   }
 
   ofstream t2;
@@ -171,10 +186,17 @@ void Decryption(string alphabet, int fileSize)
   string uncode;
   for(int i = 0; i < fileSize; i++)
   {
-    uncode += alphabet[(IndexFor(code[i]) - IndexFor(key[i % key.length()]) + alphabet.length()) % alphabet.length()];
-    // the same scheme as in encryption, but if there is negative number in (IndexFor(code[i]) - IndexFor(key[i % key.length()])
-    // -> + alphabet.length() and after % alphabet.length(), if sum is positive + alphabet.length() nothing changes as,
-    // for example, 3 + 26 = 29; 29%26 = 3
+    if(code[i] == ' ' || code[i] == '.')
+    {
+      uncode += code[i];
+    }
+    else
+    {
+      uncode += alphabet[(IndexFor(code[i]) - IndexFor(key[i % key.length()]) + alphabet.length()) % alphabet.length()];
+      // the same scheme as in encryption, but if there is negative number in (IndexFor(code[i]) - IndexFor(key[i % key.length()])
+      // -> + alphabet.length() and after % alphabet.length(), if sum is positive + alphabet.length() nothing changes as,
+      // for example, 3 + 26 = 29; 29%26 = 3
+    }
   }
 
   ofstream t3;
@@ -209,7 +231,7 @@ int main()
   enum KEYS { num1 = 49, num2 = 50, num3 = 51 , num4 = 52, num5 = 53, num6 = 54, num7 = 55, num8 = 56, num9 = 57 };
 
   int choice;
-  string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ .";
   int fileSize;
   int isEncrypted = 0;
 
