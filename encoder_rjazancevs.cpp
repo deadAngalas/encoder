@@ -4,6 +4,7 @@
 #include<fstream>
 #include<cctype> //toupper
 #include<cstring> // strcmp
+#define N 26
 
 using namespace std;
 
@@ -116,7 +117,7 @@ void Encryption(string alphabet, int &fileSize)
     }
     else
     {
-      code += alphabet[(IndexFor(content[i]) + IndexFor(key[i % key.length()])) % 26]; // 26 is english alphabet symbol count
+      code += alphabet[(IndexFor(content[i]) + IndexFor(key[i % key.length()])) % N]; // N is english alphabet symbol count
       //cout << IndexFor(key[i % key.length()]) << " "; // 0 % 6 = 0 -> key[0] = H -> h index in alphabet = 7 ---- % key.length() lai atkartojas key index
       //cout << IndexFor(content[i]) << " "; // index for message
       //cout << (IndexFor(content[i]) + IndexFor(key[i % key.length()])) % 26 << " "; // index values after + and %
@@ -136,7 +137,7 @@ void Encryption(string alphabet, int &fileSize)
   t2 << code;
   t2.close();
 
-  //system("cls");
+  system("cls");
   cout << "\nMessage was successfully encrypted! DO NOT FORGET THE KEY!" << endl;
 }
 
@@ -191,7 +192,7 @@ void Decryption(string alphabet, int fileSize)
     }
     else
     {
-      uncode += alphabet[(IndexFor(code[i]) - IndexFor(key[i % key.length()]) + 26) % 26];
+      uncode += alphabet[(IndexFor(code[i]) - IndexFor(key[i % key.length()]) + N) % N];
       // the same scheme as in encryption, but if there is negative number in (IndexFor(code[i]) - IndexFor(key[i % key.length()])
       // -> + 26 and after % 26, if sum is positive + 26 nothing changes as,
       // for example, 3 + 26 = 29; 29%26 = 3
